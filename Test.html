@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BayaniHUB | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'sleek-dark': '#0F1117',
+                        'accent-indigo': '#6366F1',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .dark body { background-color: #0F1117; color: white; }
+        .dark .glass-card { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+        .dark .text-sleek-dark { color: #F8F9FF; }
+        .settings-panel { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-[#F8F9FF] text-slate-800">
+
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-sleek-dark text-white p-6 flex flex-col fixed h-full z-50">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="w-8 h-8 bg-accent-indigo rounded-xl flex items-center justify-center font-black">B</div>
+                <h1 class="font-black text-xl tracking-tighter uppercase">BayaniHUB</h1>
+            </div>
+            <nav class="space-y-1 flex-1">
+                <a href="dashboard.html" class="flex items-center gap-3 p-4 bg-white/10 rounded-2xl text-white"><span>🏠</span> Dashboard</a>
+                <a href="rewards.html" class="flex items-center gap-3 p-4 text-slate-400 hover:text-white transition"><span>🎁</span> Rewards</a>
+                <button onclick="toggleSettings()" class="w-full flex items-center gap-3 p-4 text-slate-400 hover:text-white transition"><span>⚙️</span> Settings</button>
+            </nav>
+            <a href="index.html" class="p-4 text-rose-400 font-bold flex items-center gap-3"><span>🚪</span> Logout</a>
+        </aside>
+
+        <main class="flex-1 ml-64 p-10">
+            <header class="mb-10">
+                <h2 class="text-4xl font-extrabold tracking-tight text-sleek-dark">Mabuhay, <span id="display-name">Zoa</span>!</h2>
+                <p class="text-indigo-400 font-medium">You have <span class="font-bold text-accent-indigo">2,450 Points</span> to spend.</p>
+            </header>
+
+            <div class="grid grid-cols-3 gap-6 mb-10">
+                <div class="glass-card bg-white p-6 rounded-[2rem] shadow-sm border border-indigo-50">
+                    <p class="text-[10px] font-black text-indigo-300 uppercase">Reports Sent</p>
+                    <p class="text-3xl font-black text-sleek-dark">12</p>
+                </div>
+                </div>
+        </main>
+    </div>
+
+    <div id="settings-overlay" onclick="toggleSettings()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300"></div>
+    <div id="settings-panel" class="settings-panel fixed inset-y-0 right-0 w-80 bg-white dark:bg-slate-900 shadow-2xl z-[200] transform translate-x-full border-l border-indigo-50 dark:border-slate-800 p-8">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-xl font-black text-sleek-dark">Settings</h3>
+            <button onclick="toggleSettings()" class="text-slate-400">✕</button>
+        </div>
+
+        <div class="text-center mb-10">
+            <div class="relative inline-block group">
+                <img id="pfp-preview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Rayce" class="w-24 h-24 rounded-3xl border-4 border-indigo-50 mx-auto transition group-hover:opacity-80">
+                <label for="pfp-input" class="absolute -bottom-2 -right-2 bg-accent-indigo text-white p-2 rounded-xl cursor-pointer shadow-lg">📸</label>
+                <input type="file" id="pfp-input" class="hidden" accept="image/*" onchange="updatePFP(this)">
+            </div>
+            <p class="text-[10px] font-black text-indigo-300 uppercase mt-4">Profile Picture</p>
+        </div>
+
+        <div class="flex items-center justify-between p-4 bg-indigo-50/50 dark:bg-white/5 rounded-2xl">
+            <span class="text-sm font-bold">Dark Mode</span>
+            <button onclick="toggleDark()" class="w-12 h-6 bg-slate-300 dark:bg-accent-indigo rounded-full relative transition-colors">
+                <div id="dot" class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform dark:translate-x-6"></div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            const overlay = document.getElementById('settings-overlay');
+            panel.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+            setTimeout(() => overlay.classList.toggle('opacity-100'), 10);
+        }
+
+        function toggleDark() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function updatePFP(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => document.getElementById('pfp-preview').src = e.target.result;
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-[#F8F9FF] p-10">
+    <div class="max-w-5xl mx-auto">
+        <header class="flex justify-between items-end mb-16">
+            <div>
+                <a href="dashboard.html" class="text-indigo-400 text-sm font-bold hover:underline">← Back to Hub</a>
+                <h2 class="text-5xl font-black text-slate-900 mt-4">Hero Rewards</h2>
+            </div>
+            <div class="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl">
+                <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Balance</span>
+                <p class="text-4xl font-black">2,450 <span class="text-sm font-medium">pts</span></p>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-[3rem] border border-indigo-50 shadow-sm hover:shadow-2xl transition">
+                <div class="text-5xl mb-6">🍚</div>
+                <h3 class="text-2xl font-black text-slate-900 mb-2">1 Kilo Rice</h3>
+                <p class="text-slate-500 text-sm mb-8">Premium Sinandomeng rice for your family.</p>
+                <div class="flex items-center justify-between bg-indigo-50 p-4 rounded-2xl">
+                    <span class="font-black text-indigo-600">1,200 PTS</span>
+                    <button onclick="alert('Successfully Redeemed! Check your email for the QR code.')" class="bg-indigo-600 text-white px-6 py-2 rounded-xl text-[10px] font-black">REDEEM</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-[3rem] border border-indigo-50 shadow-sm hover:shadow-2xl transition">
+                <div class="text-5xl mb-6">📱</div>
+                <h3 class="text-2xl font-black text-slate-900 mb-2">₱50 Load Card</h3>
+                <p class="text-slate-500 text-sm mb-8">Valid for Globe, Smart, or TM top-ups.</p>
+                <div class="flex items-center justify-between bg-indigo-50 p-4 rounded-2xl">
+                    <span class="font-black text-indigo-600">500 PTS</span>
+                    <button class="bg-indigo-600 text-white px-6 py-2 rounded-xl text-[10px] font-black">REDEEM</button>
+                </div>
+            </div>
+            
+            </div>
+    </div>
+</body>
+</html>
