@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Command | BayaniHUB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .bg-sleek-dark { background-color: #0F1117; }
+        .text-accent-indigo { color: #6366F1; }
+        .bg-accent-indigo { background-color: #6366F1; }
+    </style>
+</head>
+<body class="bg-[#F8F9FF] text-slate-800">
+
+    <div class="flex min-h-screen">
+        <aside class="w-72 bg-sleek-dark text-white p-8 flex flex-col fixed h-full">
+            <div class="flex items-center gap-3 mb-12">
+                <div class="w-10 h-10 bg-accent-indigo rounded-2xl flex items-center justify-center font-black text-xl">B</div>
+                <h1 class="font-black tracking-tighter text-2xl uppercase">Admin</h1>
+            </div>
+            
+            <nav class="space-y-2 flex-1">
+                <a href="dashboard.html" class="flex items-center gap-4 p-4 text-slate-400 hover:text-white transition group">
+                    <span class="text-lg group-hover:scale-110 transition">📊</span> Dashboard
+                </a>
+                <a href="admin.html" class="flex items-center gap-4 p-4 bg-accent-indigo text-white rounded-2xl shadow-lg shadow-indigo-500/20">
+                    <span class="text-lg">📋</span> Command Center
+                </a>
+                <a href="#" class="flex items-center gap-4 p-4 text-slate-400 hover:text-white transition">
+                    <span class="text-lg">🗺️</span> Map Oversight
+                </a>
+            </nav>
+
+            <button onclick="logout()" class="flex items-center gap-4 p-4 text-rose-400 hover:bg-rose-500/10 rounded-2xl transition">
+                <span>🚪</span> Logout
+            </button>
+        </aside>
+
+        <main class="flex-1 ml-72 p-12">
+            <header class="flex justify-between items-end mb-12">
+                <div>
+                    <span class="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-full text-[10px] font-black tracking-widest uppercase">Central Command</span>
+                    <h2 class="text-5xl font-black tracking-tight text-sleek-dark mt-2">Active Incidents</h2>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="glass-card p-6 rounded-3xl shadow-sm min-w-[120px]">
+                        <p class="text-[10px] font-black text-indigo-300 uppercase tracking-widest">Incoming</p>
+                        <p class="text-3xl font-black text-sleek-dark" id="count-pending">18</p>
+                    </div>
+                    <div class="bg-sleek-dark p-6 rounded-3xl shadow-xl min-w-[120px]">
+                        <p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Resolved</p>
+                        <p class="text-3xl font-black text-white" id="count-resolved">42</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex gap-3">
+                    <button class="px-6 py-2 bg-sleek-dark text-white rounded-xl text-xs font-bold">All Requests</button>
+                    <button class="px-6 py-2 bg-white text-slate-500 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50">High Priority</button>
+                </div>
+                <div class="relative">
+                    <input type="text" placeholder="Search by Reporter or ID..." class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs w-64 outline-none focus:ring-2 focus:ring-accent-indigo">
+                </div>
+            </div>
+
+            <div class="glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-white">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-indigo-50/50">
+                            <th class="p-6 text-[10px] font-black text-indigo-400 uppercase tracking-widest">Timestamp</th>
+                            <th class="p-6 text-[10px] font-black text-indigo-400 uppercase tracking-widest">Reporter</th>
+                            <th class="p-6 text-[10px] font-black text-indigo-400 uppercase tracking-widest">Issue</th>
+                            <th class="p-6 text-[10px] font-black text-indigo-400 uppercase tracking-widest">Status</th>
+                            <th class="p-6 text-[10px] font-black text-indigo-400 uppercase tracking-widest text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-table-body" class="divide-y divide-indigo-50/50">
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // MOCK DATA (Until you connect your teammate's backend)
+        const reports = [
+            { id: 1, time: "2m ago", user: "Rayce Manuel", issue: "Broken Streetlight", status: "Pending", color: "amber" },
+            { id: 2, time: "15m ago", user: "Kris Ortega", issue: "Waste Overflow", status: "In Progress", color: "indigo" },
+            { id: 3, time: "1h ago", user: "Chris Magadan", issue: "Road Pothole", status: "Resolved", color: "green" },
+        ];
+
+        function renderReports() {
+            const container = document.getElementById('report-table-body');
+            container.innerHTML = reports.map(r => `
+                <tr class="hover:bg-white/50 transition cursor-pointer group">
+                    <td class="p-6 text-xs font-bold text-slate-400">${r.time}</td>
+                    <td class="p-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-[10px] font-bold text-indigo-600">
+                                ${r.user.charAt(0)}
+                            </div>
+                            <span class="text-sm font-bold text-sleek-dark">${r.user}</span>
+                        </div>
+                    </td>
+                    <td class="p-6 text-sm font-medium text-slate-600">${r.issue}</td>
+                    <td class="p-6">
+                        <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider 
+                            ${r.color === 'amber' ? 'bg-amber-100 text-amber-600' : ''}
+                            ${r.color === 'indigo' ? 'bg-indigo-100 text-indigo-600' : ''}
+                            ${r.color === 'green' ? 'bg-emerald-100 text-emerald-600' : ''}">
+                            ${r.status}
+                        </span>
+                    </td>
+                    <td class="p-6 text-right">
+                        <button class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-bold hover:bg-indigo-600 hover:text-white transition">
+                            VIEW DETAILS
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        window.onload = renderReports;
+    </script>
+</body>
+</html>
